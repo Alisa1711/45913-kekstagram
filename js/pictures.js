@@ -97,8 +97,21 @@
 
   var usersPictures = generatePictures(25, descriptions);
   renderPicturesList(usersPictures);
-  renderBigPicture(usersPictures[0]);
 
   bigPictureSection.querySelector('.social__comment-count').classList.add('visually-hidden');
   bigPictureSection.querySelector('.social__loadmore').classList.add('visually-hidden');
+
+  // при изменении значения поля #upload-file показывать форму img-upload__overlay
+  // форма должназакрываться по клику на .upload-cancel или по нажатию клавиши Esc
+  // при закрытии формы, дополнительно нужно сбрасывать значение поля выбора файла #upload-file
+  // на пин слайдера .scale__pin добавить обработчик события mouseup, который будет изменять уровень насыщенности фильтра. Для определения уровня насыщенности, нужно рассчитать положение пина слайдера относительно всего блока и воспользоваться пропорцией, чтобы понять, какой уровень эффекта нужно применить.
+  // при переключении фильтра, уровень эффекта должен сразу cбрасываться до начального состояния
+  // нажатие на preview фотографии приводит к открытию большой фотографии
+
+  var uploadFileInput = document.querySelector('#upload-file');
+  var uploadedImageEdit = document.querySelector('.img-upload__overlay');
+
+  uploadFileInput.addEventListener('change', function () {
+    uploadedImageEdit.classList.remove('hidden');
+  });
 }());
