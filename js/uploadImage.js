@@ -10,6 +10,7 @@
 
   var scaleLine = imageEditForm.querySelector('.scale__line');
   var scalePin = imageEditForm.querySelector('.scale__pin');
+  var scaleInput = imageEditForm.querySelector('.scale__value');
 
   var buttonMinus = imageEditForm.querySelector('.resize__control--minus');
   var buttonPlus = imageEditForm.querySelector('.resize__control--plus');
@@ -117,6 +118,7 @@
         imagePreview.style.filter = getFilterValue(effects[i], x);
       }
     }
+    scaleInput.value = String(Math.round(x * 100));
   };
 
   uploadFileInput.addEventListener('change', function () {
