@@ -197,7 +197,9 @@
   });
 
   submitButton.addEventListener('click', function () {
-    var customValidityMessages = validateInputHashtags(hashtagsInput.value.split(' '));
-    hashtagsInput.setCustomValidity(customValidityMessages);
+    if (hashtagsInput.value) {
+      var customValidityMessages = validateInputHashtags(hashtagsInput.value.split(' '));
+      hashtagsInput.setCustomValidity(customValidityMessages);
+    }
   });
 }());
