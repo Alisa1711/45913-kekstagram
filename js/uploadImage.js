@@ -173,12 +173,11 @@
     }
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
-      var hashSymbols = hashtag.match(/\#/g);
 
       if (hashtag[0] !== '#') {
         validityMessages.push('Хеш-тэг должен начинаться с #');
       }
-      if (hashSymbols && hashSymbols.length > 1) {
+      if (hashtag.lastIndexOf('#') > 0) {
         validityMessages.push('Хэш-теги разделяются пробелами');
       }
       if (hashtag === '#') {
