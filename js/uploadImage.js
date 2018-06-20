@@ -159,8 +159,7 @@
     for (var i = 0; i < arr.length; i++) {
       uniqueItems[arr[i]] = true;
     }
-    uniqueItems = Object.keys(uniqueItems);
-    return uniqueItems;
+    return Object.keys(uniqueItems);
   };
 
   var validateInputHashtags = function (hashtags) {
