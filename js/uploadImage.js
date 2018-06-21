@@ -146,10 +146,11 @@
   var hashtagsInput = imageEditForm.querySelector('.text__hashtags');
   var textFieldset = imageEditForm.querySelector('.img-upload__text');
 
-  var checkMatchesСaseInsensitive = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = arr[i].toLowerCase();
-    }
+  var removeExtraSpaces = function (str) {
+    return str.replace(/[\s{2,}]+/g, ' ').trim();
+  };
+
+  var checkMatchingItems = function (arr) {
     return arr.length - getUniqueItems(arr).length;
   };
 
@@ -162,10 +163,11 @@
     return Object.keys(uniqueItems);
   };
 
-  var validateInputHashtags = function (hashtags) {
+  var validateHashtagsInput = function (inputValue) {
+    var hashtags = inputValue.toLowerCase().split(' ');
     var validityMessages = [];
 
-    if (checkMatchesСaseInsensitive(hashtags)) {
+    if (checkMatchingItems(hashtags)) {
       validityMessages.push('Нельзя использовать два одинаковых хеш-тега (хеш-теги нечувствительный к регистру)');
     }
     if (hashtags.length > 5) {
@@ -195,9 +197,12 @@
   });
 
   submitButton.addEventListener('click', function () {
+    hashtagsInput.value = removeExtraSpaces(hashtagsInput.value);
     if (hashtagsInput.value) {
-      var customValidityMessages = validateInputHashtags(hashtagsInput.value.split(' '));
+      var customValidityMessages = validateHashtagsInput(hashtagsInput.value);
       hashtagsInput.setCustomValidity(customValidityMessages);
+    } else {
+      hashtagsInput.setCustomValidity('');
     }
   });
 }());
