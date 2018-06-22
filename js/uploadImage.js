@@ -3,6 +3,9 @@
 (function () {
 
   var ESC_KEYCODE = 27;
+  var MAX_HASHTAGS_NUMBER = 5;
+  var MAX_HASHTAG_LENGTH = 20;
+
   var uploadFileInput = document.querySelector('#upload-file');
   var imageEditForm = document.querySelector('.img-upload__overlay');
   var imagePreview = imageEditForm.querySelector('.img-upload__preview');
@@ -170,7 +173,7 @@
     if (checkMatchingItems(hashtags)) {
       validityMessages.push('Нельзя использовать два одинаковых хеш-тега (хеш-теги нечувствительный к регистру)');
     }
-    if (hashtags.length > 5) {
+    if (hashtags.length > MAX_HASHTAGS_NUMBER) {
       validityMessages.push('Нельзя указать больше пяти хэш-тегов');
     }
     for (var i = 0; i < hashtags.length; i++) {
@@ -185,7 +188,7 @@
       if (hashtag === '#') {
         validityMessages.push('Хеш-тег не может состоять только из одной решётки');
       }
-      if (hashtag.length > 20) {
+      if (hashtag.length > MAX_HASHTAG_LENGTH) {
         validityMessages.push('Максимальная длина хэш-тега 20 символов, включая решётку');
       }
     }
