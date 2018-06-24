@@ -150,7 +150,6 @@
   };
 
   var onMouseDown = function (evt) {
-    evt.preventDefault();
     var sliderCoord = scaleLine.getBoundingClientRect();
     var scalePinOffsetLeft = evt.clientX - sliderCoord.left;
 
