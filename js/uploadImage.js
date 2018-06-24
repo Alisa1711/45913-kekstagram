@@ -21,62 +21,62 @@
   var buttonMinus = imageEditForm.querySelector('.resize__control--minus');
   var buttonPlus = imageEditForm.querySelector('.resize__control--plus');
   var sizeInput = imageEditForm.querySelector('.resize__control--value');
-  var currentSize = 100;
-  var maxSize = 100;
-  var minSize = 25;
-  var resizeStep = 25;
+  var imageSize = 100;
+  var MAX_IMAGE_SIZE = 100;
+  var MIN_IMAGE_SIZE = 25;
+  var RESIZING_STEP = 25;
 
   var effectsList = imageEditForm.querySelector('.effects__list');
   var checkedEffectRadio = effectsList.querySelector('input[checked]');
-  var effectClass;
+
   var effects = [
     {
       name: 'effect-chrome',
       filter: 'grayscale',
-      filterMin: 0,
-      filterMax: 1,
-      filterUnits: ''
+      min: 0,
+      max: 1,
+      units: ''
     },
     {
       name: 'effect-sepia',
       filter: 'sepia',
-      filterMin: 0,
-      filterMax: 1,
-      filterUnits: ''
+      min: 0,
+      max: 1,
+      units: ''
     },
     {
       name: 'effect-marvin',
       filter: 'invert',
-      filterMin: 0,
-      filterMax: 100,
-      filterUnits: '%'
+      min: 0,
+      max: 100,
+      units: '%'
     },
     {
       name: 'effect-phobos',
       filter: 'blur',
-      filterMin: 0,
-      filterMax: 5,
-      filterUnits: 'px'
+      min: 0,
+      max: 5,
+      units: 'px'
     },
     {
       name: 'effect-heat',
       filter: 'brightness',
-      filterMin: 1,
-      filterMax: 3,
-      filterUnits: ''
+      min: 1,
+      max: 3,
+      units: ''
     }
   ];
   var reduceImage = function () {
-    if (currentSize <= maxSize && currentSize > minSize) {
-      currentSize -= resizeStep;
+    if (imageSize <= MAX_IMAGE_SIZE && imageSize > MIN_IMAGE_SIZE) {
+      imageSize -= RESIZING_STEP;
     }
-    return currentSize;
+    return imageSize;
   };
   var increaseImage = function () {
-    if (currentSize < maxSize && currentSize >= minSize) {
-      currentSize += resizeStep;
+    if (imageSize < MAX_IMAGE_SIZE && imageSize >= MIN_IMAGE_SIZE) {
+      imageSize += RESIZING_STEP;
     }
-    return currentSize;
+    return imageSize;
   };
   var resizeImage = function (button) {
     if (button === buttonMinus) {
@@ -84,15 +84,18 @@
     } else if (button === buttonPlus) {
       increaseImage();
     }
-    imagePreview.style.transform = 'scale(' + currentSize / 100 + ')';
-    sizeInput.value = currentSize + '%';
+    imagePreview.style.transform = 'scale(' + imageSize / 100 + ')';
+    sizeInput.value = imageSize + '%';
+  };
+  var getEffectClass = function () {
+    return 'effects__preview--' + checkedEffectRadio.value;
   };
   var getEffectLevel = function () {
     return Math.round(scalePin.offsetLeft / scaleLine.offsetWidth * 100);
   };
   var getFilterValue = function (effect) {
-    var currentFilterValue = getEffectLevel() * effect.filterMax / 100 + effect.filterMin;
-    return effect.filter + '(' + currentFilterValue + effect.filterUnits + ')';
+    var currentFilterValue = getEffectLevel() * effect.max / 100 + effect.min;
+    return effect.filter + '(' + currentFilterValue + effect.units + ')';
   };
   var setScalePosition = function (position) {
     scalePin.style.left = position + 'px';
@@ -101,20 +104,19 @@
 
   var removeEffect = function () {
     imagePreview.removeAttribute('style');
-    imagePreview.classList.remove(effectClass);
+    imagePreview.classList.remove(getEffectClass());
   };
 
   var applyEffect = function (input) {
     removeEffect();
     setScalePosition(scaleLine.offsetWidth);
     scaleInput.value = getEffectLevel();
+    checkedEffectRadio = input;
     if (input.id === 'effect-none') {
       scale.classList.add('hidden');
     } else {
       scale.classList.remove('hidden');
-      effectClass = 'effects__preview--' + input.value;
-      imagePreview.classList.add(effectClass);
-      checkedEffectRadio = input;
+      imagePreview.classList.add(getEffectClass());
     }
   };
 
@@ -142,7 +144,7 @@
     }
   };
 
-  var applyFilterChange = function () {
+  var setEffectLevelChanges = function () {
     var effect = effects.find(function (elem) {
       return elem.name === checkedEffectRadio.id;
     });
@@ -152,24 +154,24 @@
   var onMouseDown = function (evt) {
     evt.preventDefault();
     var sliderCoord = scaleLine.getBoundingClientRect();
-    var scalePinOffsetLeft = evt.clientX - sliderCoord.left;
+    var scalePinLeft = evt.clientX - sliderCoord.left;
 
-    setScalePosition(scalePinOffsetLeft);
+    setScalePosition(scalePinLeft);
 
     var onMouseMove = function (moveEvt) {
-      scalePinOffsetLeft = moveEvt.clientX - sliderCoord.left;
+      scalePinLeft = moveEvt.clientX - sliderCoord.left;
 
-      if (scalePinOffsetLeft < 0) {
-        scalePinOffsetLeft = 0;
-      } else if (scalePinOffsetLeft > scaleLine.offsetWidth) {
-        scalePinOffsetLeft = scaleLine.offsetWidth;
+      if (scalePinLeft < 0) {
+        scalePinLeft = 0;
+      } else if (scalePinLeft > scaleLine.offsetWidth) {
+        scalePinLeft = scaleLine.offsetWidth;
       }
-      setScalePosition(scalePinOffsetLeft);
-      applyFilterChange();
+      setScalePosition(scalePinLeft);
+      setEffectLevelChanges();
     };
 
     var onMouseUp = function () {
-      applyFilterChange();
+      setEffectLevelChanges();
       scaleInput.value = getEffectLevel();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -218,7 +220,7 @@
       validityMessages.push('Нельзя использовать два одинаковых хеш-тега (хеш-теги нечувствительный к регистру)');
     }
     if (hashtags.length > MAX_HASHTAGS_NUMBER) {
-      validityMessages.push('Нельзя указать больше пяти хэш-тегов');
+      validityMessages.push('Нельзя указать больше' + MAX_HASHTAGS_NUMBER + 'хэш-тегов');
     }
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
@@ -233,7 +235,7 @@
         validityMessages.push('Хеш-тег не может состоять только из одной решётки');
       }
       if (hashtag.length > MAX_HASHTAG_LENGTH) {
-        validityMessages.push('Максимальная длина хэш-тега 20 символов, включая решётку');
+        validityMessages.push('Максимальная длина хэш-тега' + MAX_HASHTAG_LENGTH + 'символов, включая решётку');
       }
     }
     return getUniqueItems(validityMessages).join('. ');
