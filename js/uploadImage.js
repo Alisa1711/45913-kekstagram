@@ -15,6 +15,7 @@
   var scaleLine = imageEditForm.querySelector('.scale__line');
   var scalePin = imageEditForm.querySelector('.scale__pin');
   var scaleInput = imageEditForm.querySelector('.scale__value');
+  var scaleLevel = imageEditForm.querySelector('.scale__level');
 
   var imgResizeFieldset = imageEditForm.querySelector('.img-upload__resize');
   var buttonMinus = imageEditForm.querySelector('.resize__control--minus');
@@ -25,8 +26,8 @@
   var minSize = 25;
   var resizeStep = 25;
 
-  var effectsRadios = imageEditForm.querySelectorAll('.effects__radio');
-  var currentEffectFilter;
+  var effectsList = imageEditForm.querySelector('.effects__list');
+  var checkedEffectRadio = effectsList.querySelector('input[checked]');
   var effectClass;
   var effects = [
     {
@@ -86,53 +87,91 @@
     imagePreview.style.transform = 'scale(' + currentSize / 100 + ')';
     sizeInput.value = currentSize + '%';
   };
-  var getFilterValue = function (effect, x) {
-    var currentFilterValue = x * effect.filterMax + effect.filterMin;
+  var getEffectLevel = function () {
+    return Math.round(scalePin.offsetLeft / scaleLine.offsetWidth * 100);
+  };
+  var getFilterValue = function (effect) {
+    var currentFilterValue = getEffectLevel() * effect.filterMax / 100 + effect.filterMin;
     return effect.filter + '(' + currentFilterValue + effect.filterUnits + ')';
   };
+  var setScaleDefault = function () {
+    scalePin.style.left = scaleLine.offsetWidth + 'px';
+    scaleLevel.style.width = scaleLine.offsetWidth + 'px';
+    scaleInput.value = getEffectLevel();
+  };
+
   var removeEffect = function () {
-    imagePreview.style.filter = '';
+    imagePreview.removeAttribute('style');
     imagePreview.classList.remove(effectClass);
   };
-  var onEffectsRadiosClick = function (evt) {
+
+  var applyEffect = function (input) {
     removeEffect();
-    if (evt.target.id === 'effect-none') {
+    setScaleDefault();
+    if (input.id === 'effect-none') {
       scale.classList.add('hidden');
     } else {
       scale.classList.remove('hidden');
-      effectClass = 'effects__preview--' + evt.target.value;
+      effectClass = 'effects__preview--' + input.value;
       imagePreview.classList.add(effectClass);
-      currentEffectFilter = evt.target.id;
+      checkedEffectRadio = input;
     }
   };
+
   var openImageEditForm = function () {
     imageEditForm.classList.remove('hidden');
+    applyEffect(checkedEffectRadio);
     document.addEventListener('keydown', onImageEditFormPressEsc);
     document.body.classList.add('modal-open');
-    for (var i = 0; i < effectsRadios.length; i++) {
-      effectsRadios[i].addEventListener('click', onEffectsRadiosClick);
-    }
-    scalePin.addEventListener('mouseup', applyFilterChange);
+    effectsList.addEventListener('click', function (evt) {
+      applyEffect(evt.target);
+    });
+    scalePin.addEventListener('mousedown', onMouseDown);
   };
+
   var closeImageEditForm = function () {
     imageEditForm.classList.add('hidden');
     uploadFileInput.value = '';
     document.removeEventListener('keydown', onImageEditFormPressEsc);
     document.body.classList.remove('modal-open');
   };
+
   var onImageEditFormPressEsc = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       closeImageEditForm();
     }
   };
+
   var applyFilterChange = function () {
-    var x = scalePin.offsetLeft / scaleLine.offsetWidth;
-    for (var i = 0; i < effects.length; i++) {
-      if (effects[i].name === currentEffectFilter) {
-        imagePreview.style.filter = getFilterValue(effects[i], x);
+    var effect = effects.find(function (elem) {
+      return elem.name === checkedEffectRadio.id;
+    });
+    imagePreview.style.filter = getFilterValue(effect);
+  };
+
+  var onMouseDown = function (evt) {
+    evt.preventDefault();
+
+    var startCoord = evt.clientX;
+
+    var onMouseMove = function (moveEvt) {
+      var shift = startCoord - moveEvt.clientX;
+      var scalePinOffsetLeft = scalePin.offsetLeft - shift;
+      startCoord = moveEvt.clientX;
+
+      if (scalePinOffsetLeft >= 0 && scalePinOffsetLeft <= scaleLine.offsetWidth) {
+        scalePin.style.left = scalePinOffsetLeft + 'px';
+        scaleLevel.style.width = scalePinOffsetLeft + 'px';
+        applyFilterChange();
       }
-    }
-    scaleInput.value = String(Math.round(x * 100));
+    };
+    var onMouseUp = function () {
+      scaleInput.value = getEffectLevel();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   };
 
   uploadFileInput.addEventListener('change', function () {
