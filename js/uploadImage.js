@@ -128,7 +128,7 @@
     effectsList.addEventListener('click', function (evt) {
       applyEffect(evt.target);
     });
-    scaleLine.addEventListener('mousedown', onMouseDown);
+    scaleLine.addEventListener('mousedown', onScaleLineMouseDown);
   };
 
   var closeImageEditForm = function () {
@@ -151,7 +151,7 @@
     imagePreview.style.filter = getFilterValue(effect);
   };
 
-  var onMouseDown = function (evt) {
+  var onScaleLineMouseDown = function (evt) {
     var sliderCoord = scaleLine.getBoundingClientRect();
     var scalePinLeft = evt.clientX - sliderCoord.left;
 
