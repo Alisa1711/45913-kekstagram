@@ -94,10 +94,9 @@
     var currentFilterValue = getEffectLevel() * effect.filterMax / 100 + effect.filterMin;
     return effect.filter + '(' + currentFilterValue + effect.filterUnits + ')';
   };
-  var setScaleDefault = function () {
-    scalePin.style.left = scaleLine.offsetWidth + 'px';
-    scaleLevel.style.width = scaleLine.offsetWidth + 'px';
-    scaleInput.value = getEffectLevel();
+  var setScalePosition = function (position) {
+    scalePin.style.left = position + 'px';
+    scaleLevel.style.width = position + 'px';
   };
 
   var removeEffect = function () {
@@ -107,7 +106,8 @@
 
   var applyEffect = function (input) {
     removeEffect();
-    setScaleDefault();
+    setScalePosition(scaleLine.offsetWidth);
+    scaleInput.value = getEffectLevel();
     if (input.id === 'effect-none') {
       scale.classList.add('hidden');
     } else {
@@ -126,7 +126,7 @@
     effectsList.addEventListener('click', function (evt) {
       applyEffect(evt.target);
     });
-    scalePin.addEventListener('mousedown', onMouseDown);
+    scaleLine.addEventListener('mousedown', onMouseDown);
   };
 
   var closeImageEditForm = function () {
@@ -151,25 +151,30 @@
 
   var onMouseDown = function (evt) {
     evt.preventDefault();
+    var sliderCoord = scaleLine.getBoundingClientRect();
+    var scalePinOffsetLeft = evt.clientX - sliderCoord.left;
 
-    var startCoord = evt.clientX;
+    setScalePosition(scalePinOffsetLeft);
 
     var onMouseMove = function (moveEvt) {
-      var shift = startCoord - moveEvt.clientX;
-      var scalePinOffsetLeft = scalePin.offsetLeft - shift;
-      startCoord = moveEvt.clientX;
+      scalePinOffsetLeft = moveEvt.clientX - sliderCoord.left;
 
-      if (scalePinOffsetLeft >= 0 && scalePinOffsetLeft <= scaleLine.offsetWidth) {
-        scalePin.style.left = scalePinOffsetLeft + 'px';
-        scaleLevel.style.width = scalePinOffsetLeft + 'px';
-        applyFilterChange();
+      if (scalePinOffsetLeft < 0) {
+        scalePinOffsetLeft = 0;
+      } else if (scalePinOffsetLeft > scaleLine.offsetWidth) {
+        scalePinOffsetLeft = scaleLine.offsetWidth;
       }
+      setScalePosition(scalePinOffsetLeft);
+      applyFilterChange();
     };
+
     var onMouseUp = function () {
+      applyFilterChange();
       scaleInput.value = getEffectLevel();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
+
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   };
