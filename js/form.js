@@ -36,7 +36,8 @@
 
   window.form = {
     imageEditForm: imageEditForm,
-    imagePreview: imagePreview
+    imagePreview: imagePreview,
+    scaleLine: scaleLine
   };
 
 }());

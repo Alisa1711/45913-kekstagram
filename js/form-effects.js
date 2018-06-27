@@ -4,7 +4,7 @@
 
   var imagePreview = window.form.imagePreview;
   var scale = document.querySelector('.img-upload__scale');
-  var scaleLine = document.querySelector('.scale__line');
+  var scaleLine = window.form.scaleLine;
   var scalePin = document.querySelector('.scale__pin');
   var scalePinLeft = scalePin.offsetLeft;
   var scaleInput = document.querySelector('.scale__value');
