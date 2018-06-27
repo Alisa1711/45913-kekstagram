@@ -10,7 +10,7 @@
   var scaleInput = document.querySelector('.scale__value');
   var scaleLevel = document.querySelector('.scale__level');
 
-  var checkedEffectRadio = document.querySelector('.effects__radio[checked]').id;
+  var checkedEffectRadio = document.querySelector('.effects__radio[checked]');
 
   var effects = [
     {
