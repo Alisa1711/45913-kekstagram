@@ -6,13 +6,12 @@
   var scale = document.querySelector('.img-upload__scale');
   var scaleLine = window.form.scaleLine;
   var scalePin = document.querySelector('.scale__pin');
-  var scalePinLeft = scalePin.offsetLeft;
   var scaleInput = document.querySelector('.scale__value');
   var scaleLevel = document.querySelector('.scale__level');
 
   var checkedEffectRadio = document.querySelector('.effects__radio[checked]');
 
-  var effects = [
+  var EFFECTS = [
     {
       name: 'effect-chrome',
       filter: 'grayscale',
@@ -54,7 +53,7 @@
     return 'effects__preview--' + checkedEffectRadio.value;
   };
   var getEffectLevel = function () {
-    return Math.round(scalePinLeft / scaleLine.offsetWidth * 100);
+    return Math.round(scalePin.offsetLeft / scaleLine.offsetWidth * 100);
   };
   var getFilterValue = function (effect) {
     var currentFilterValue = getEffectLevel() * effect.max / 100 + effect.min;
@@ -67,7 +66,7 @@
   };
 
   var changeEffect = function (evt) {
-    imagePreview.removeAttribute('style');
+    imagePreview.style.filter = '';
     imagePreview.classList.remove(getEffectClass());
 
     setScalePosition(scaleLine.offsetWidth);
@@ -81,10 +80,11 @@
       scale.classList.remove('hidden');
       imagePreview.classList.add(getEffectClass());
     }
+
   };
 
   var setEffectLevelChanges = function () {
-    var effect = effects.find(function (elem) {
+    var effect = EFFECTS.find(function (elem) {
       return elem.name === checkedEffectRadio.id;
     });
     imagePreview.style.filter = getFilterValue(effect);
@@ -93,7 +93,7 @@
   var onScaleLineMouseDown = function (evt) {
     evt.preventDefault();
     var sliderCoord = scaleLine.getBoundingClientRect();
-    scalePinLeft = evt.clientX - sliderCoord.left;
+    var scalePinLeft = evt.clientX - sliderCoord.left;
 
     setScalePosition(scalePinLeft);
 

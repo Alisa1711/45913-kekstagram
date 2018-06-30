@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var template = document.querySelector('#picture');
 
   window.utils = {
 
@@ -33,7 +34,11 @@
       if (evt.keyCode === ESC_KEYCODE) {
         action();
       }
+    },
+    cloneTemplate: function (className) {
+      return template.content.querySelector(className).cloneNode(true);
     }
+
   };
 
 }());

@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  var images = new Array(25);
-  images = window.generatePictures(images.length);
-
   var renderGallery = function (pictures) {
     var picturesList = document.querySelector('.pictures');
     var fragment = document.createDocumentFragment();
@@ -14,5 +11,15 @@
     picturesList.appendChild(fragment);
   };
 
-  renderGallery(images);
+  var onError = function (message) {
+    var node = document.createElement('div');
+    node.style.padding = '20px';
+    node.style.textAlign = 'center';
+    node.style.fontSize = '16px';
+    node.style.textTransform = 'lowercase';
+    node.textContent = message;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.download(renderGallery, onError);
 }());

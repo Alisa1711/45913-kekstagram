@@ -3,9 +3,42 @@
 (function () {
   var MIN_AVATAR_NUMBER = 1;
   var MAX_AVATAR_NUMBER = 6;
+  var MAX_COMMENTS_DISPLAY = 5;
   var image = document.querySelector('.big-picture');
   var imageCloseButton = document.querySelector('.big-picture__cancel');
-  var socialComments = image.querySelectorAll('.social__comment');
+  var commentsList = image.querySelector('.social__comments');
+
+  var getAvatarPath = function () {
+    return 'img/avatar-' + window.utils.getRandomInteger(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER) + '.svg';
+  };
+
+  var renderComment = function (commentText) {
+    var commentTemplate = document.querySelector('#picture').content.querySelector('.social__comment');
+    var comment = commentTemplate.cloneNode(true);
+
+    comment.querySelector('.social__picture').src = getAvatarPath();
+    comment.querySelector('.social__text').textContent = commentText;
+
+    return comment;
+  };
+
+  var renderCommentsList = function (comments, maxAmount) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < comments.length && i < maxAmount; i++) {
+      fragment.appendChild(renderComment(comments[i]));
+    }
+    commentsList.appendChild(fragment);
+  };
+
+  var removeComments = function () {
+    var tmpRange = document.createRange();
+
+    tmpRange.selectNodeContents(commentsList);
+    tmpRange.deleteContents();
+
+    tmpRange.detach();
+  };
 
   var renderImage = function (picture) {
     image.querySelector('img').src = picture.url;
@@ -13,10 +46,8 @@
     image.querySelector('.likes-count').textContent = picture.likes;
     image.querySelector('.comments-count').textContent = picture.comments.length;
 
-    for (var i = 0; i < picture.comments.length; i++) {
-      socialComments[i].querySelector('.social__picture').src = 'img/avatar-' + window.utils.getRandomInteger(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER) + '.svg';
-      socialComments[i].querySelector('.social__text').textContent = picture.comments[i];
-    }
+    renderCommentsList(picture.comments, MAX_COMMENTS_DISPLAY);
+
     image.querySelector('.social__comment-count').classList.add('visually-hidden');
     image.querySelector('.social__loadmore').classList.add('visually-hidden');
   };
@@ -26,6 +57,7 @@
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onImagePressEsc);
     imageCloseButton.removeEventListener('click', closeImage);
+    removeComments();
   };
 
   var onImagePressEsc = function (evt) {

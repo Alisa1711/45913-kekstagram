@@ -9,8 +9,7 @@
   var imgResizeFieldset = document.querySelector('.img-upload__resize');
   var buttonMinus = imgResizeFieldset.querySelector('.resize__control--minus');
   var buttonPlus = imgResizeFieldset.querySelector('.resize__control--plus');
-  var sizeInput = imgResizeFieldset.querySelector('.resize__control--value');
-  var imageSize = parseInt(sizeInput.value, 10);
+  var imageSize = parseInt(window.form.sizeInput.value, 10);
 
   var reduceImage = function () {
     if (imageSize <= MAX_SIZE && imageSize > MIN_SIZE) {
@@ -31,7 +30,7 @@
       increaseImage();
     }
     imagePreview.style.transform = 'scale(' + imageSize / 100 + ')';
-    sizeInput.value = imageSize + '%';
+    window.form.sizeInput.value = imageSize + '%';
   };
 
   imgResizeFieldset.addEventListener('click', resizeImage);

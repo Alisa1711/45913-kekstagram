@@ -3,8 +3,7 @@
 (function () {
 
   window.renderThumbnail = function (picture) {
-    var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
-    var thumbnail = pictureTemplate.cloneNode(true);
+    var thumbnail = window.utils.cloneTemplate('.picture__link');
 
     thumbnail.querySelector('.picture__img').src = picture.url;
     thumbnail.querySelector('.picture__stat--likes').textContent = picture.likes;
