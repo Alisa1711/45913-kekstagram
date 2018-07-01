@@ -19,11 +19,15 @@
     },
 
     getUniqueItems: function (arr) {
-      var uniqueItems = {};
-      for (var i = 0; i < arr.length; i++) {
-        uniqueItems[arr[i]] = true;
-      }
-      return Object.keys(uniqueItems);
+      var obj = {};
+      arr.forEach(function (item) {
+        obj[item] = true;
+      });
+      return Object.keys(obj);
+    },
+
+    getLastItem: function (arr) {
+      return arr[arr.length - 1];
     },
 
     checkMatchingItems: function (arr) {

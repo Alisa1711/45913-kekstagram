@@ -3,18 +3,20 @@
 (function () {
   var MIN_AVATAR_NUMBER = 1;
   var MAX_AVATAR_NUMBER = 6;
-  var MAX_COMMENTS_DISPLAY = 5;
+  var COMMENTS_PER_TIME = 5;
+  var start = 0;
   var image = document.querySelector('.big-picture');
-  var imageCloseButton = document.querySelector('.big-picture__cancel');
+  var imageCloseButton = image.querySelector('.big-picture__cancel');
   var commentsList = image.querySelector('.social__comments');
+  var loadMoreButton = image.querySelector('.social__loadmore');
+  var comments;
 
   var getAvatarPath = function () {
     return 'img/avatar-' + window.utils.getRandomInteger(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER) + '.svg';
   };
 
   var renderComment = function (commentText) {
-    var commentTemplate = document.querySelector('#picture').content.querySelector('.social__comment');
-    var comment = commentTemplate.cloneNode(true);
+    var comment = window.utils.cloneTemplate('.social__comment');
 
     comment.querySelector('.social__picture').src = getAvatarPath();
     comment.querySelector('.social__text').textContent = commentText;
@@ -22,12 +24,19 @@
     return comment;
   };
 
-  var renderCommentsList = function (comments, maxAmount) {
+  var renderCommentsList = function () {
+    var fewComments = comments.slice(start, start + COMMENTS_PER_TIME);
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < comments.length && i < maxAmount; i++) {
-      fragment.appendChild(renderComment(comments[i]));
+    if (window.utils.getLastItem(fewComments) === window.utils.getLastItem(comments)) {
+      start = 0;
+      loadMoreButton.classList.add('hidden');
+    } else {
+      start += COMMENTS_PER_TIME;
     }
+    fewComments.forEach(function (comment) {
+      fragment.appendChild(renderComment(comment));
+    });
     commentsList.appendChild(fragment);
   };
 
@@ -41,15 +50,15 @@
   };
 
   var renderImage = function (picture) {
+    comments = picture.comments;
     image.querySelector('img').src = picture.url;
     image.querySelector('.social__caption').textContent = picture.description;
     image.querySelector('.likes-count').textContent = picture.likes;
     image.querySelector('.comments-count').textContent = picture.comments.length;
-
-    renderCommentsList(picture.comments, MAX_COMMENTS_DISPLAY);
-
+    loadMoreButton.classList.remove('hidden');
+    renderCommentsList();
+    loadMoreButton.addEventListener('click', renderCommentsList);
     image.querySelector('.social__comment-count').classList.add('visually-hidden');
-    image.querySelector('.social__loadmore').classList.add('visually-hidden');
   };
 
   var closeImage = function () {

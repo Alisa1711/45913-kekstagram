@@ -10,7 +10,7 @@
     var validityMessages = [];
 
     if (window.utils.checkMatchingItems(hashtags)) {
-      validityMessages.push('Нельзя использовать два одинаковых хеш-тега (хеш-теги нечувствительный к регистру)');
+      validityMessages.push('Нельзя использовать два одинаковых хеш-тега (хеш-теги нечувствительны к регистру)');
     }
     if (hashtags.length > MAX_HASHTAGS_NUMBER) {
       validityMessages.push('Нельзя указать больше' + MAX_HASHTAGS_NUMBER + 'хэш-тегов');
