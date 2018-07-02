@@ -106,8 +106,8 @@
       closeOverlay();
       uploadFile.click();
     }
-    // прячем div с ошибкой
     evt.currentTarget.parentNode.classList.add('hidden');
+    evt.currentTarget.removeEventListener('click', onErrorLinksClick);
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
