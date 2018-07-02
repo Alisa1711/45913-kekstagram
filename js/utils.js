@@ -26,12 +26,16 @@
       return Object.keys(obj);
     },
 
-    getLastItem: function (arr) {
-      return arr[arr.length - 1];
-    },
-
     checkMatchingItems: function (arr) {
       return arr.length - this.getUniqueItems(arr).length;
+    },
+
+    groupArray: function (arr1, groupSize) {
+      var arr2 = [];
+      for (var i = 0; i < arr1.length; i += groupSize) {
+        arr2.push(arr1.slice(i, i + groupSize));
+      }
+      return arr2;
     },
 
     isEscPressed: function (evt, action) {
