@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var template = document.querySelector('#picture');
 
   window.utils = {
 
@@ -18,22 +19,34 @@
     },
 
     getUniqueItems: function (arr) {
-      var uniqueItems = {};
-      for (var i = 0; i < arr.length; i++) {
-        uniqueItems[arr[i]] = true;
-      }
-      return Object.keys(uniqueItems);
+      var obj = {};
+      arr.forEach(function (item) {
+        obj[item] = true;
+      });
+      return Object.keys(obj);
     },
 
     checkMatchingItems: function (arr) {
       return arr.length - this.getUniqueItems(arr).length;
     },
 
+    groupArray: function (arr1, groupSize) {
+      var arr2 = [];
+      for (var i = 0; i < arr1.length; i += groupSize) {
+        arr2.push(arr1.slice(i, i + groupSize));
+      }
+      return arr2;
+    },
+
     isEscPressed: function (evt, action) {
       if (evt.keyCode === ESC_KEYCODE) {
         action();
       }
+    },
+    cloneTemplate: function (className) {
+      return template.content.querySelector(className).cloneNode(true);
     }
+
   };
 
 }());
