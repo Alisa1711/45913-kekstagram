@@ -88,25 +88,26 @@
 
   var onError = function (message) {
     var error = window.utils.cloneTemplate('.img-upload__message--error');
-    document.querySelector('.img-upload').appendChild(error);
-    error.querySelector('.error__text').textContent = message;
-
     var errorLinks = error.querySelector('.error__links');
-    var errorLinkAgain = error.querySelectorAll('.error__link')[0];
-    var errorLinkNew = error.querySelectorAll('.error__link')[1];
 
-    errorLinks.addEventListener('click', function (evt) {
-      if (evt.target === errorLinkAgain) {
-        onFormSubmit(evt);
-      } else if (evt.target === errorLinkNew) {
-        closeOverlay();
-        uploadFile.click();
-      }
-      error.classList.add('hidden');
-    });
-
+    document.body.appendChild(error);
+    error.querySelector('.error__text').textContent = message;
     error.style.zIndex = '2';
     error.classList.remove('hidden');
+    errorLinks.addEventListener('click', onErrorLinksClick);
+  };
+
+  var onErrorLinksClick = function (evt) {
+    if (evt.target === evt.currentTarget.children[0]) {
+      // клик по ссылке "Попробовать снова"
+      onFormSubmit(evt);
+    } else if (evt.target === evt.currentTarget.children[1]) {
+      // клик по ссылке "Загрузить другой файл"
+      closeOverlay();
+      uploadFile.click();
+    }
+    evt.currentTarget.parentNode.classList.add('hidden');
+    evt.currentTarget.removeEventListener('click', onErrorLinksClick);
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);

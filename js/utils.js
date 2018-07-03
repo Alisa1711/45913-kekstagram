@@ -2,6 +2,8 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var DEBOUNCE_INTERVAL = 500;
+  var lastTimeout;
   var template = document.querySelector('#picture');
 
   window.utils = {
@@ -12,6 +14,17 @@
 
     getRandomItem: function (arr) {
       return arr[Math.floor(Math.random() * arr.length)];
+    },
+
+    getRandomArray: function (arr1, length) {
+      var arr2 = [];
+      while (arr2.length < length) {
+        var randomItem = this.getRandomItem(arr1);
+        if (arr2.indexOf(randomItem) === -1) {
+          arr2.push(randomItem);
+        }
+      }
+      return arr2;
     },
 
     removeExtraSpaces: function (str) {
@@ -45,8 +58,14 @@
     },
     cloneTemplate: function (className) {
       return template.content.querySelector(className).cloneNode(true);
-    }
+    },
 
+    debounce: function (fun) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+    }
   };
 
 }());
