@@ -10,21 +10,17 @@
 
   var Effect = function (name, options) {
     this.name = name;
-    this.filter = options.filter;
-    this.min = options.min || 0;
-    this.max = options.max || 1;
-    this.units = options.units || '';
+    if (options) {
+      this.filter = options.filter;
+      this.min = options.min || 0;
+      this.max = options.max || 1;
+      this.units = options.units || '';
+    }
   };
 
   Effect.prototype = {
-    getClass: function () {
-      return 'effects__preview--' + this.name;
-    },
     addClass: function (elem) {
-      elem.classList.add(this.getClass());
-    },
-    removeClass: function (elem) {
-      elem.classList.remove(this.getClass());
+      elem.className = 'effects__preview--' + this.name;
     },
     getLevel: function () {
       return Math.round(scalePin.offsetLeft / scaleLine.offsetWidth * 100);
@@ -36,6 +32,7 @@
   };
 
   var effectsMap = {
+    'effect-none': new Effect('none'),
     'effect-chrome': new Effect('chrome', {filter: 'grayscale'}),
     'effect-sepia': new Effect('sepia', {filter: 'sepia'}),
     'effect-marvin': new Effect('marvin', {filter: 'invert', max: 100, units: '%'}),
@@ -49,20 +46,13 @@
     if (evt.target.tagName === 'INPUT') {
       imagePreview.removeAttribute('style');
 
-      if (currentEffect) {
-        currentEffect.removeClass(imagePreview);
-      }
-
       currentEffect = effectsMap[evt.target.id];
+      currentEffect.addClass(imagePreview);
 
-      if (currentEffect) {
-        scale.classList.remove('hidden');
-        setScalePosition(scaleLine.offsetWidth);
-        scaleInput.value = currentEffect.getLevel();
-        currentEffect.addClass(imagePreview);
-      } else {
-        scale.classList.add('hidden');
-      }
+      scale.classList.toggle('hidden', (currentEffect.name === 'none'));
+
+      setScalePosition(scaleLine.offsetWidth);
+      scaleInput.value = currentEffect.getLevel();
     }
   };
 
