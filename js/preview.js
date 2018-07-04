@@ -1,19 +1,22 @@
 'use strict';
 
 (function () {
-  var MIN_AVATAR_NUMBER = 1;
-  var MAX_AVATAR_NUMBER = 6;
+  var avatarNumber = {
+    MIN: 1,
+    MAX: 6
+  };
   var COMMENTS_PER_TIME = 5;
   var counter = 0;
   var commentsNumber = 0;
   var pictureComments;
   var image = document.querySelector('.big-picture');
   var imageCloseButton = image.querySelector('.big-picture__cancel');
+  var commentsCounter = image.querySelector('.counter');
   var commentsList = image.querySelector('.social__comments');
   var loadMoreButton = image.querySelector('.social__loadmore');
 
   var getAvatarPath = function () {
-    return 'img/avatar-' + window.utils.getRandomInteger(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER) + '.svg';
+    return 'img/avatar-' + window.utils.getRandomInteger(avatarNumber.MIN, avatarNumber.MAX) + '.svg';
   };
 
   var renderComment = function (commentText) {
@@ -40,7 +43,7 @@
       loadMoreButton.removeEventListener('click', onLoadMoreButtonClick);
     }
 
-    image.querySelector('.counter').textContent = commentsNumber;
+    commentsCounter.textContent = commentsNumber;
   };
 
   var removeComments = function () {

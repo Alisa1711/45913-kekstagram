@@ -17,14 +17,11 @@
     },
 
     getRandomArray: function (arr1, length) {
-      var arr2 = [];
-      while (arr2.length < length) {
-        var randomItem = this.getRandomItem(arr1);
-        if (arr2.indexOf(randomItem) === -1) {
-          arr2.push(randomItem);
-        }
-      }
-      return arr2;
+      var arr2 = arr1.slice();
+      arr2.sort(function () {
+        return Math.random() - 0.5;
+      });
+      return arr2.splice(0, length);
     },
 
     removeExtraSpaces: function (str) {
