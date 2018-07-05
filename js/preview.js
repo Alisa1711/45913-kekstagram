@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var avatarNumber = {
+  var AVATAR = {
     MIN: 1,
     MAX: 6
   };
@@ -16,7 +16,7 @@
   var loadMoreButton = image.querySelector('.social__loadmore');
 
   var getAvatarPath = function () {
-    return 'img/avatar-' + window.utils.getRandomInteger(avatarNumber.MIN, avatarNumber.MAX) + '.svg';
+    return 'img/avatar-' + window.utils.getRandomInteger(AVATAR.MIN, AVATAR.MAX) + '.svg';
   };
 
   var renderComment = function (commentText) {
