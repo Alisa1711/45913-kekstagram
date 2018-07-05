@@ -2,7 +2,7 @@
 
 (function () {
 
-  var size = {
+  var SIZE = {
     MAX: 100,
     MIN: 25,
     STEP: 25
@@ -14,14 +14,14 @@
   var imageSize = parseInt(window.form.sizeInput.value, 10);
 
   var reduceImage = function () {
-    if (imageSize <= size.MAX && imageSize > size.MIN) {
-      imageSize -= size.STEP;
+    if (imageSize <= SIZE.MAX && imageSize > SIZE.MIN) {
+      imageSize -= SIZE.STEP;
     }
     return imageSize;
   };
   var increaseImage = function () {
-    if (imageSize < size.MAX && imageSize >= size.MIN) {
-      imageSize += size.STEP;
+    if (imageSize < SIZE.MAX && imageSize >= SIZE.MIN) {
+      imageSize += SIZE.STEP;
     }
     return imageSize;
   };
