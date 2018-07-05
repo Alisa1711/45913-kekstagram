@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var RESTRICTION = {
+  var Restriction = {
     NUMBER: 5,
     LENGTH: 20
   };
@@ -13,8 +13,8 @@
     if (window.utils.checkMatchingItems(hashtags)) {
       validityMessages.push('Нельзя использовать два одинаковых хеш-тега (хеш-теги нечувствительны к регистру)');
     }
-    if (hashtags.length > RESTRICTION.NUMBER) {
-      validityMessages.push('Нельзя указать больше' + RESTRICTION.NUMBER + 'хэш-тегов');
+    if (hashtags.length > Restriction.NUMBER) {
+      validityMessages.push('Нельзя указать больше' + Restriction.NUMBER + 'хэш-тегов');
     }
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
@@ -28,8 +28,8 @@
       if (hashtag === '#') {
         validityMessages.push('Хеш-тег не может состоять только из одной решётки');
       }
-      if (hashtag.length > RESTRICTION.LENGTH) {
-        validityMessages.push('Максимальная длина хэш-тега' + RESTRICTION.LENGTH + 'символов, включая решётку');
+      if (hashtag.length > Restriction.LENGTH) {
+        validityMessages.push('Максимальная длина хэш-тега' + Restriction.LENGTH + 'символов, включая решётку');
       }
     }
     return window.utils.getUniqueItems(validityMessages).join('. ');

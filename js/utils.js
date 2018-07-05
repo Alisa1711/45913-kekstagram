@@ -53,6 +53,7 @@
         action();
       }
     },
+
     cloneTemplate: function (className) {
       return template.content.querySelector(className).cloneNode(true);
     },
@@ -62,6 +63,10 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+    },
+
+    stopProp: function (evt) {
+      evt.stopPropagation();
     }
   };
 

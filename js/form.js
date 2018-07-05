@@ -9,6 +9,7 @@
   var overlay = form.querySelector('.img-upload__overlay');
   var uploadCancel = form.querySelector('#upload-cancel');
   var effectsList = form.querySelector('.effects__list');
+  var scale = document.querySelector('.img-upload__scale');
   var scaleLine = form.querySelector('.scale__line');
   var submitButton = form.querySelector('.img-upload__submit');
   var hashtagsInput = form.querySelector('.text__hashtags');
@@ -45,6 +46,10 @@
     overlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
 
+    submitButton.addEventListener('click', onSubmitButtonClick);
+    form.addEventListener('submit', onFormSubmit);
+    textFieldset.addEventListener('keydown', window.utils.stopProp);
+
     effectsList.addEventListener('click', window.effects.changeEffect);
     scaleLine.addEventListener('mousedown', window.effects.onScaleLineMouseDown);
     uploadCancel.addEventListener('click', closeOverlay);
@@ -54,6 +59,11 @@
   var closeOverlay = function () {
     overlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    scale.classList.add('hidden');
+
+    submitButton.removeEventListener('click', onSubmitButtonClick);
+    form.removeEventListener('submit', onFormSubmit);
+    textFieldset.removeEventListener('keydown', window.utils.stopProp);
 
     effectsList.removeEventListener('click', window.effects.changeEffect);
     scaleLine.removeEventListener('mousedown', window.effects.onScaleLineMouseDown);
@@ -71,6 +81,7 @@
     imagePreview.removeAttribute('style');
     imagePreview.className = '';
     uploadFile.value = '';
+    hashtagsInput.setCustomValidity('');
     form.reset();
   };
 
@@ -115,15 +126,11 @@
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
-  submitButton.addEventListener('click', onSubmitButtonClick);
-  form.addEventListener('submit', onFormSubmit);
-  textFieldset.addEventListener('keydown', function (evt) {
-    evt.stopPropagation();
-  });
 
   window.form = {
     overlay: overlay,
     imagePreview: imagePreview,
+    scale: scale,
     scaleLine: scaleLine,
     sizeInput: sizeInput
   };

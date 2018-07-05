@@ -1,22 +1,26 @@
 'use strict';
 
 (function () {
-  var URL_DOWNLOAD = 'https://js.dump.academy/kekstagram/data';
-  var URL_UPLOAD = 'https://js.dump.academy/kekstagram';
-  var SUCCESS = 200;
-  var ERROR_INVALID_REQUEST = 400;
-  var ERROR_NOTHING_FOUND = 404;
+  var Url = {
+    DOWNLOAD: 'https://js.dump.academy/kekstagram/data',
+    UPLOAD: 'https://js.dump.academy/kekstagram',
+  };
+  var Code = {
+    SUCCESS: 200,
+    INVALID_REQUEST: 400,
+    NOTHING_FOUND: 404
+  };
 
   var setupLoad = function (xhr, onLoad, onError) {
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
-        case SUCCESS:
+        case Code.SUCCESS:
           onLoad(xhr.response);
           break;
-        case ERROR_INVALID_REQUEST:
+        case Code.INVALID_REQUEST:
           onError('Неверный запрос');
           break;
-        case ERROR_NOTHING_FOUND:
+        case Code.NOTHING_FOUND:
           onError('Ничего не найдено');
           break;
 
@@ -38,7 +42,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     setupLoad(xhr, onLoad, onError);
-    xhr.open('GET', URL_DOWNLOAD);
+    xhr.open('GET', Url.DOWNLOAD);
     xhr.send();
   };
 
@@ -46,7 +50,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     setupLoad(xhr, onLoad, onError);
-    xhr.open('POST', URL_UPLOAD);
+    xhr.open('POST', Url.UPLOAD);
     xhr.send(data);
   };
 
