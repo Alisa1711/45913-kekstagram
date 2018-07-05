@@ -2,6 +2,7 @@
 
 (function () {
 
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var form = document.querySelector('.img-upload__form');
   var imagePreview = form.querySelector('img');
   var uploadFile = form.querySelector('#upload-file');
@@ -17,23 +18,26 @@
 
   var onUploadFileChange = function () {
     var file = uploadFile.files[0];
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (item) {
+      return fileName.endsWith(item);
+    });
     var reader = new FileReader();
 
-    reader.onloadend = function () {
-      imagePreview.src = reader.result;
-      for (var i = 0; i < filterPreviews.length; i++) {
-        filterPreviews[i].style.backgroundImage = 'url(' + reader.result + ')';
-      }
-      openOverlay();
-    };
-
-    if (file) {
+    if (matches) {
+      reader.addEventListener('load', function () {
+        imagePreview.src = reader.result;
+        filterPreviews.forEach(function (item) {
+          item.style.backgroundImage = 'url(' + reader.result + ')';
+        });
+        openOverlay();
+      });
       reader.readAsDataURL(file);
     } else {
       imagePreview.src = '';
-      for (var i = 0; i < filterPreviews.length; i++) {
-        filterPreviews[i].style.backgroundImage = '';
-      }
+      filterPreviews.forEach(function (item) {
+        item.style.backgroundImage = '';
+      });
     }
   };
 
@@ -41,8 +45,8 @@
     overlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
 
-    effectsList.addEventListener('click', window.formEffects.changeEffect);
-    scaleLine.addEventListener('mousedown', window.formEffects.onScaleLineMouseDown);
+    effectsList.addEventListener('click', window.effects.changeEffect);
+    scaleLine.addEventListener('mousedown', window.effects.onScaleLineMouseDown);
     uploadCancel.addEventListener('click', closeOverlay);
     document.addEventListener('keydown', onOverlayPressEsc);
   };
@@ -51,8 +55,8 @@
     overlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
 
-    effectsList.removeEventListener('click', window.formEffects.changeEffect);
-    scaleLine.removeEventListener('mousedown', window.formEffects.onScaleLineMouseDown);
+    effectsList.removeEventListener('click', window.effects.changeEffect);
+    scaleLine.removeEventListener('mousedown', window.effects.onScaleLineMouseDown);
     uploadCancel.removeEventListener('click', closeOverlay);
     document.removeEventListener('keydown', onOverlayPressEsc);
 
