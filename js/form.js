@@ -48,10 +48,10 @@
 
     submitButton.addEventListener('click', onSubmitButtonClick);
     form.addEventListener('submit', onFormSubmit);
-    textFieldset.addEventListener('keydown', window.utils.stopProp);
+    textFieldset.addEventListener('keydown', onTextFieldsetKeydown);
 
     effectsList.addEventListener('click', window.effects.changeEffect);
-    scaleLine.addEventListener('mousedown', onTextFieldsetKeydown);
+    scaleLine.addEventListener('mousedown', window.effects.onScaleLineMouseDown);
     uploadCancel.addEventListener('click', closeOverlay);
     document.addEventListener('keydown', onOverlayPressEsc);
   };
