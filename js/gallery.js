@@ -38,10 +38,10 @@
 
   var removeThumbnails = function () {
     var tmpRange = document.createRange();
-    var start = picturesList.querySelector('.img-upload');
+    var imgUpload = picturesList.querySelector('.img-upload');
 
     tmpRange.selectNodeContents(picturesList);
-    tmpRange.setStart(start, 2);
+    tmpRange.setStartAfter(imgUpload);
     tmpRange.deleteContents();
 
     tmpRange.detach();
