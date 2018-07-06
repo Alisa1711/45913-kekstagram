@@ -51,7 +51,7 @@
     textFieldset.addEventListener('keydown', window.utils.stopProp);
 
     effectsList.addEventListener('click', window.effects.changeEffect);
-    scaleLine.addEventListener('mousedown', window.effects.onScaleLineMouseDown);
+    scaleLine.addEventListener('mousedown', onTextFieldsetKeydown);
     uploadCancel.addEventListener('click', closeOverlay);
     document.addEventListener('keydown', onOverlayPressEsc);
   };
@@ -63,7 +63,7 @@
 
     submitButton.removeEventListener('click', onSubmitButtonClick);
     form.removeEventListener('submit', onFormSubmit);
-    textFieldset.removeEventListener('keydown', window.utils.stopProp);
+    textFieldset.removeEventListener('keydown', onTextFieldsetKeydown);
 
     effectsList.removeEventListener('click', window.effects.changeEffect);
     scaleLine.removeEventListener('mousedown', window.effects.onScaleLineMouseDown);
@@ -71,6 +71,10 @@
     document.removeEventListener('keydown', onOverlayPressEsc);
 
     resetForm();
+  };
+
+  var onTextFieldsetKeydown = function (evt) {
+    evt.stopPropagation();
   };
 
   var onOverlayPressEsc = function (evt) {

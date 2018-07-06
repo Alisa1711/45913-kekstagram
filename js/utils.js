@@ -63,10 +63,6 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
-    },
-
-    stopProp: function (evt) {
-      evt.stopPropagation();
     }
   };
 

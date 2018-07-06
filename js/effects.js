@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PERCENT = 100;
   var imagePreview = window.form.imagePreview;
   var scale = window.form.scale;
   var scaleLine = window.form.scaleLine;
@@ -23,10 +24,10 @@
       elem.className = 'effects__preview--' + this.name;
     },
     getLevel: function () {
-      return Math.round(scalePin.offsetLeft / scaleLine.offsetWidth * 100);
+      return (scalePin.offsetLeft / scaleLine.offsetWidth).toFixed(2);
     },
     applyLevel: function (elem) {
-      var filterValue = this.getLevel() * this.max / 100 + this.min;
+      var filterValue = this.getLevel() * this.max + this.min;
       elem.style.filter = this.filter + '(' + filterValue + this.units + ')';
     },
   };
@@ -52,13 +53,17 @@
       scale.classList.toggle('hidden', (currentEffect.name === 'none'));
 
       setScalePosition(scaleLine.offsetWidth);
-      scaleInput.value = currentEffect.getLevel();
+      setScaleInput();
     }
   };
 
   var setScalePosition = function (position) {
     scalePin.style.left = position + 'px';
     scaleLevel.style.width = position + 'px';
+  };
+
+  var setScaleInput = function () {
+    scaleInput.value = currentEffect.getLevel() * PERCENT;
   };
 
   var onScaleLineMouseDown = function (evt) {
@@ -82,7 +87,7 @@
 
     var onMouseUp = function () {
       currentEffect.applyLevel(imagePreview);
-      scaleInput.value = currentEffect.getLevel();
+      setScaleInput();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
